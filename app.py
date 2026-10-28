@@ -183,9 +183,9 @@ hr{border-color:var(--line)!important;}
 /* each page's columns slide up when you switch pages */
 [data-testid="stColumn"]{animation:fadeBottom .6s ease-out backwards;}
 
-/* ---------- image horizontal flip fix for About section ---------- */
+/* ---------- correct vertical image orientation for both About section and ID card ---------- */
 [data-testid="stImage"] img {
-    transform: scaleX(-1);
+    transform: rotate(270deg);
     transition: scale .4s;
 }
 .id-photo img {
@@ -193,7 +193,7 @@ hr{border-color:var(--line)!important;}
     height: 100%;
     object-fit: cover;
     display: block;
-    transform: none;
+    transform: rotate(270deg);
 }
 
 /* ---------- hero ---------- */
