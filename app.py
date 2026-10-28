@@ -183,9 +183,9 @@ hr{border-color:var(--line)!important;}
 /* each page's columns slide up when you switch pages */
 [data-testid="stColumn"]{animation:fadeBottom .6s ease-out backwards;}
 
-/* ---------- image orientation fix ---------- */
+/* ---------- image orientation fix for About section ---------- */
 [data-testid="stImage"] img {
-    transform: rotate(180deg);
+    transform: rotate(90deg);
     transition: scale .4s;
 }
 .id-photo img {
