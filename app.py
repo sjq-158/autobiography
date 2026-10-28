@@ -9,6 +9,7 @@ import streamlit as st
 NAME = "Ericka Fatima Reign R. Ligaray"
 SECTION = "CS365 - Applied AI"
 PROGRAM = "BS Computer Science, 3rd year"
+INITIALS = "EL"
 IMG_DIR = Path(__file__).parent / "assets" / "images"
 
 # ID card details (edit these)
@@ -32,6 +33,7 @@ LIGHT = {
     "tagbg": "#FFF7D6", "tagtext": "#1F3A5F", "blockbg": "#1F3A5F", "blocktext": "#FFFFFF",
     "hero1": "#A8C6E7", "hero2": "#FFF2B2", "hero3": "#FFE08A",
     "bandbg": "#1F3A5F", "bandtext": "#FFF7D6",
+    # menu: dark yellow chosen tab with blue text
     "navbg": "#1F3A5F", "navtext": "#FFF7D6", "navhl": "#FFE08A", "navhltext": "#1F3A5F",
     "scheme": "light",
 }
@@ -42,7 +44,8 @@ DARK = {
     "tagbg": "#2A4468", "tagtext": "#EAF1FA", "blockbg": "#FFE08A", "blocktext": "#1F3A5F",
     "hero1": "#1F3A5F", "hero2": "#2B4A75", "hero3": "#6B5E2E",
     "bandbg": "#7FA8D6", "bandtext": "#10243D",
-    "navbg": "#1A2C47", "navtext": "#EAF1FA", "navhl": "#7FA8D6", "navhltext": "#10243D",
+    # menu: opposite, blue chosen tab with dark yellow text
+    "navbg": "#1A2C47", "navtext": "#EAF1FA", "navhl": "#3D6FB3", "navhltext": "#FFE08A",
     "scheme": "dark",
 }
 P = DARK if dark else LIGHT
@@ -51,8 +54,11 @@ FONT_IMPORT = (
     "@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800"
     "&family=Inter:wght@400;500;600&display=swap');"
 )
-VARS = ":root{" + "".join(f"--{k}:{v};" for k, v in P.items()) + \
-       "--paper:#FFF7D6;--ink:#1F3A5F;color-scheme:" + P["scheme"] + ";}"
+VARS = (
+    ":root{" + "".join(f"--{k}:{v};" for k, v in P.items())
+    + f'--navpill:"{SECTION}";--navmono:"{INITIALS}";'
+    + f'--paper:#FFF7D6;--ink:#1F3A5F;color-scheme:{P["scheme"]};' + "}"
+)
 
 BASE_CSS = """
 .stApp{background:var(--bg);}
@@ -111,7 +117,9 @@ hr{border-color:var(--line)!important;}
 @keyframes spin{to{rotate:360deg}}
 @keyframes grow{from{width:0}}
 @keyframes gradientShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-@keyframes tabPop{0%{scale:.8}60%{scale:1.06}100%{scale:1}}
+@keyframes tabPop{0%{scale:.85}60%{scale:1.05}100%{scale:1}}
+@keyframes typeReveal{from{width:100%}to{width:0}}
+@keyframes caretBlink{0%,100%{border-left-color:var(--navhltext)}50%{border-left-color:transparent}}
 
 /* scroll reveal: plays on load, and follows the scroll in browsers that support it */
 .reveal{animation:fadeBottom .8s ease-out backwards var(--d,0s);}
@@ -242,24 +250,52 @@ hr{border-color:var(--line)!important;}
 .placeholder .ico{animation:floaty 3s ease-in-out infinite;}
 
 /* ---------- menu (tabs) ---------- */
-[data-baseweb="tab-list"]{
-    background:var(--navbg);border-radius:999px;padding:.5rem;gap:.3rem;width:100%;
-    box-shadow:0 10px 24px rgba(16,36,61,.25);margin-bottom:1.2rem;
+.stTabs [data-baseweb="tab-list"],.stTabs [role="tablist"]{
+    display:flex!important;align-items:center;gap:.4rem;width:100%!important;box-sizing:border-box;
+    background:var(--navbg)!important;border-radius:999px;padding:.55rem!important;
+    box-shadow:0 10px 24px rgba(16,36,61,.25);margin-bottom:1.4rem;
 }
-[data-baseweb="tab-highlight"],[data-baseweb="tab-border"]{display:none!important;}
-button[data-baseweb="tab"]{
-    flex:1 1 0;justify-content:center;height:auto;padding:.85rem 1rem;border-radius:999px;
-    background:transparent;transition:background .3s,translate .25s;
+.stTabs [role="tablist"]::before{
+    content:var(--navmono);flex:none;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;
+    background:var(--navtext);color:var(--navbg);font-weight:800;font-size:1.3rem;letter-spacing:.02em;
 }
-button[data-baseweb="tab"] [data-testid="stMarkdownContainer"] p{
-    color:var(--navtext)!important;font-size:1.2rem;font-weight:600;letter-spacing:.02em;transition:color .3s;
+.stTabs [role="tablist"]::after{
+    content:var(--navpill);flex:none;background:var(--navtext);color:var(--navbg);border-radius:999px;
+    padding:1.05rem 1.8rem;font-weight:600;font-size:1.05rem;white-space:nowrap;margin-left:.4rem;
 }
-button[data-baseweb="tab"]:hover{translate:0 -3px;background:rgba(255,255,255,.12);}
-button[data-baseweb="tab"][aria-selected="true"]{
-    background:var(--navhl);animation:tabPop .45s cubic-bezier(.34,1.56,.64,1);
+.stTabs [data-baseweb="tab-highlight"],.stTabs [data-baseweb="tab-border"]{display:none!important;}
+.stTabs button[role="tab"]{
+    flex:1 1 0!important;justify-content:center;height:auto!important;padding:1.15rem 1rem!important;
+    border-radius:999px;background:transparent;transition:background .3s,translate .25s;
 }
-button[data-baseweb="tab"][aria-selected="true"] [data-testid="stMarkdownContainer"] p{color:var(--navhltext)!important;}
-@media (max-width:640px){button[data-baseweb="tab"] [data-testid="stMarkdownContainer"] p{font-size:.9rem;}}
+.stTabs button[role="tab"] p{
+    position:relative;display:inline-block;color:var(--navtext)!important;font-size:1.3rem!important;
+    font-weight:500!important;letter-spacing:.01em;white-space:nowrap;
+}
+.stTabs button[role="tab"]:hover{translate:0 -3px;background:rgba(255,255,255,.12);}
+.stTabs button[role="tab"][aria-selected="true"],
+.stTabs button[role="tab"][aria-selected="true"]:hover{
+    background:var(--navhl)!important;animation:tabPop .45s cubic-bezier(.34,1.56,.64,1);
+}
+.stTabs button[role="tab"][aria-selected="true"] p{color:var(--navhltext)!important;font-weight:700!important;}
+
+/* typing effect: a cover in the tab color shrinks away, its left edge is the blinking caret */
+.stTabs button[role="tab"][aria-selected="true"] p::after{
+    content:"";position:absolute;top:0;bottom:0;right:-4px;width:100%;box-sizing:border-box;
+    background:var(--navhl);border-left:2px solid var(--navhltext);
+    animation:typeReveal .9s steps(10,end) forwards,caretBlink .9s step-end infinite;
+}
+.stTabs button[role="tab"][aria-selected="true"]:nth-of-type(1) p::after{animation:typeReveal .7s steps(5,end) forwards,caretBlink .9s step-end infinite;}
+.stTabs button[role="tab"][aria-selected="true"]:nth-of-type(2) p::after{animation:typeReveal 1.3s steps(13,end) forwards,caretBlink .9s step-end infinite;}
+.stTabs button[role="tab"][aria-selected="true"]:nth-of-type(3) p::after{animation:typeReveal .8s steps(6,end) forwards,caretBlink .9s step-end infinite;}
+.stTabs button[role="tab"][aria-selected="true"]:nth-of-type(4) p::after{animation:typeReveal .7s steps(5,end) forwards,caretBlink .9s step-end infinite;}
+.stTabs button[role="tab"][aria-selected="true"]:nth-of-type(5) p::after{animation:typeReveal .9s steps(7,end) forwards,caretBlink .9s step-end infinite;}
+
+@media (max-width:900px){
+    .stTabs [role="tablist"]::before,.stTabs [role="tablist"]::after{display:none;}
+    .stTabs button[role="tab"]{padding:.8rem .4rem!important;}
+    .stTabs button[role="tab"] p{font-size:.95rem!important;}
+}
 
 /* ---------- native widgets ---------- */
 [data-testid="stMetric"]{
@@ -292,7 +328,10 @@ li[role="option"]{color:var(--text)!important;}
 .footer{display:flex;justify-content:center;align-items:center;gap:.6rem;color:var(--muted);padding:2rem 0 .8rem;}
 .footer .ico{color:var(--accent);animation:heartbeat 1.6s ease-in-out infinite;}
 
-@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;}}
+@media (prefers-reduced-motion: reduce){
+    *{animation:none!important;transition:none!important;}
+    .stTabs button[role="tab"] p::after{display:none!important;}
+}
 """
 
 # the chart is drawn by Streamlit with its own theme, so flip it in dark mode
