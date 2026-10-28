@@ -183,17 +183,13 @@ hr{border-color:var(--line)!important;}
 /* each page's columns slide up when you switch pages */
 [data-testid="stColumn"]{animation:fadeBottom .6s ease-out backwards;}
 
-/* ---------- targeted profile image orientation (does not affect works) ---------- */
-.about-profile-img [data-testid="stImage"] img {
-    transform: rotate(270deg);
-    transition: scale .4s;
-}
+/* ---------- ID card photo orientation fix ONLY ---------- */
 .id-photo img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    transform: none;
+    transform: rotate(270deg);
 }
 
 /* ---------- hero ---------- */
@@ -613,9 +609,7 @@ page = current
 if page == "About":
     col_img, col_text = st.columns([1, 2], gap="large")
     with col_img:
-        st.markdown('<div class="about-profile-img">', unsafe_allow_html=True)
         show_image("profile.jpg", "Photo of me")
-        st.markdown('</div>', unsafe_allow_html=True)
     with col_text:
         heading("user", "About me")
         st.write(
