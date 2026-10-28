@@ -183,10 +183,25 @@ hr{border-color:var(--line)!important;}
 /* each page's columns slide up when you switch pages */
 [data-testid="stColumn"]{animation:fadeBottom .6s ease-out backwards;}
 
-/* ---------- ONLY target the About page profile photo container ---------- */
+/* ---------- ONLY target the About page profile photo container (Vertical layout like ID card) ---------- */
+.about-profile-img [data-testid="stImage"] {
+    width: 260px;
+    height: 340px;
+    border-radius: 22px;
+    overflow: hidden;
+    border: 6px solid #FFE08A;
+    box-shadow: 0 10px 25px rgba(16,36,61,0.25);
+    background: #A8C6E7;
+}
 .about-profile-img [data-testid="stImage"] img {
-    transform: rotate(90deg);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: none;
     transition: scale .4s;
+}
+.about-profile-img [data-testid="stImage"] img:hover {
+    scale: 1.05;
 }
 
 /* ---------- ID card image orientation/styling ---------- */
