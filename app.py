@@ -33,7 +33,7 @@ LIGHT = {
     "tagbg": "#FFF7D6", "tagtext": "#1F3A5F", "blockbg": "#1F3A5F", "blocktext": "#FFFFFF",
     "hero1": "#A8C6E7", "hero2": "#FFF2B2", "hero3": "#FFE08A",
     "bandbg": "#1F3A5F", "bandtext": "#FFF7D6",
-    # menu: dark yellow chosen tab with blue text
+    # menu: dark yellow chosen item with blue text
     "navbg": "#1F3A5F", "navtext": "#FFF7D6", "navhl": "#FFE08A", "navhltext": "#1F3A5F",
     "scheme": "light",
 }
@@ -44,7 +44,7 @@ DARK = {
     "tagbg": "#2A4468", "tagtext": "#EAF1FA", "blockbg": "#FFE08A", "blocktext": "#1F3A5F",
     "hero1": "#1F3A5F", "hero2": "#2B4A75", "hero3": "#6B5E2E",
     "bandbg": "#7FA8D6", "bandtext": "#10243D",
-    # menu: opposite, blue chosen tab with dark yellow text
+    # menu: opposite, blue chosen item with dark yellow text
     "navbg": "#1A2C47", "navtext": "#EAF1FA", "navhl": "#3D6FB3", "navhltext": "#FFE08A",
     "scheme": "dark",
 }
@@ -54,11 +54,8 @@ FONT_IMPORT = (
     "@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800"
     "&family=Inter:wght@400;500;600&display=swap');"
 )
-VARS = (
-    ":root{" + "".join(f"--{k}:{v};" for k, v in P.items())
-    + f'--navpill:"{SECTION}";--navmono:"{INITIALS}";'
-    + f'--paper:#FFF7D6;--ink:#1F3A5F;color-scheme:{P["scheme"]};' + "}"
-)
+VARS = ":root{" + "".join(f"--{k}:{v};" for k, v in P.items()) + \
+       "--paper:#FFF7D6;--ink:#1F3A5F;color-scheme:" + P["scheme"] + ";}"
 
 BASE_CSS = """
 .stApp{background:var(--bg);}
@@ -66,7 +63,7 @@ BASE_CSS = """
 [data-testid="stSidebar"]{background:var(--side);}
 .stApp, .stApp p, .stApp li, .stApp label, .stApp h1, .stApp h2, .stApp h3, .stApp h4,
 .stApp input, .stApp textarea, .stApp button, .stApp th, .stApp td, .stApp summary,
-[data-testid="stMetricValue"], [data-testid="stMetricLabel"], [data-baseweb="tab"]{
+[data-testid="stMetricValue"], [data-testid="stMetricLabel"]{
     font-family:'Poppins',sans-serif;
 }
 .stApp p, .stApp li, .stApp label, .stApp th, .stApp td, .stApp summary,
@@ -130,7 +127,8 @@ hr{border-color:var(--line)!important;}
         animation-range:entry 0% entry 70%;
     }
 }
-[data-baseweb="tab-panel"]{animation:fadeBottom .6s ease-out backwards;}
+/* each page's columns slide up when you switch pages */
+[data-testid="stColumn"]{animation:fadeBottom .6s ease-out backwards;}
 
 /* ---------- hero ---------- */
 .hero{
@@ -249,52 +247,57 @@ hr{border-color:var(--line)!important;}
 }
 .placeholder .ico{animation:floaty 3s ease-in-out infinite;}
 
-/* ---------- menu (tabs) ---------- */
-.stTabs [data-baseweb="tab-list"],.stTabs [role="tablist"]{
-    display:flex!important;align-items:center;gap:.4rem;width:100%!important;box-sizing:border-box;
-    background:var(--navbg)!important;border-radius:999px;padding:.55rem!important;
+/* ---------- menu bar ---------- */
+.st-key-nav{
+    background:var(--navbg);border-radius:999px;padding:.55rem .7rem;
     box-shadow:0 10px 24px rgba(16,36,61,.25);margin-bottom:1.4rem;
 }
-.stTabs [role="tablist"]::before{
-    content:var(--navmono);flex:none;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;
-    background:var(--navtext);color:var(--navbg);font-weight:800;font-size:1.3rem;letter-spacing:.02em;
+.st-key-nav [data-testid="stHorizontalBlock"]{align-items:center;gap:.6rem;}
+.st-key-nav [data-testid="stColumn"]{animation:none;}
+.st-key-nav [data-testid="stRadio"]{width:100%;}
+.st-key-nav [role="radiogroup"]{
+    display:flex!important;flex-direction:row;flex-wrap:nowrap;width:100%;gap:.4rem!important;
 }
-.stTabs [role="tablist"]::after{
-    content:var(--navpill);flex:none;background:var(--navtext);color:var(--navbg);border-radius:999px;
-    padding:1.05rem 1.8rem;font-weight:600;font-size:1.05rem;white-space:nowrap;margin-left:.4rem;
+.st-key-nav label[data-baseweb="radio"]{
+    flex:1 1 0;justify-content:center;margin:0!important;padding:1.1rem .8rem!important;
+    border-radius:999px;cursor:pointer;transition:background .3s,translate .25s;
 }
-.stTabs [data-baseweb="tab-highlight"],.stTabs [data-baseweb="tab-border"]{display:none!important;}
-.stTabs button[role="tab"]{
-    flex:1 1 0!important;justify-content:center;height:auto!important;padding:1.15rem 1rem!important;
-    border-radius:999px;background:transparent;transition:background .3s,translate .25s;
+/* hide the round radio dot */
+.st-key-nav label[data-baseweb="radio"] > div:first-child{display:none!important;}
+.st-key-nav label[data-baseweb="radio"] p{
+    position:relative;display:inline-block;margin:0;white-space:nowrap;
+    color:var(--navtext)!important;font-size:1.3rem!important;font-weight:500;letter-spacing:.01em;
 }
-.stTabs button[role="tab"] p{
-    position:relative;display:inline-block;color:var(--navtext)!important;font-size:1.3rem!important;
-    font-weight:500!important;letter-spacing:.01em;white-space:nowrap;
-}
-.stTabs button[role="tab"]:hover{translate:0 -3px;background:rgba(255,255,255,.12);}
-.stTabs button[role="tab"][aria-selected="true"],
-.stTabs button[role="tab"][aria-selected="true"]:hover{
+.st-key-nav label[data-baseweb="radio"]:hover{translate:0 -3px;background:rgba(255,255,255,.12);}
+.st-key-nav label[data-baseweb="radio"]:has(input:checked){
     background:var(--navhl)!important;animation:tabPop .45s cubic-bezier(.34,1.56,.64,1);
 }
-.stTabs button[role="tab"][aria-selected="true"] p{color:var(--navhltext)!important;font-weight:700!important;}
+.st-key-nav label[data-baseweb="radio"]:has(input:checked) p{color:var(--navhltext)!important;font-weight:700;}
 
-/* typing effect: a cover in the tab color shrinks away, its left edge is the blinking caret */
-.stTabs button[role="tab"][aria-selected="true"] p::after{
+/* typing effect: a cover in the chosen color shrinks away, its left edge is the blinking caret */
+.st-key-nav label[data-baseweb="radio"]:has(input:checked) p::after{
     content:"";position:absolute;top:0;bottom:0;right:-4px;width:100%;box-sizing:border-box;
     background:var(--navhl);border-left:2px solid var(--navhltext);
     animation:typeReveal .9s steps(10,end) forwards,caretBlink .9s step-end infinite;
 }
-.stTabs button[role="tab"][aria-selected="true"]:nth-of-type(1) p::after{animation:typeReveal .7s steps(5,end) forwards,caretBlink .9s step-end infinite;}
-.stTabs button[role="tab"][aria-selected="true"]:nth-of-type(2) p::after{animation:typeReveal 1.3s steps(13,end) forwards,caretBlink .9s step-end infinite;}
-.stTabs button[role="tab"][aria-selected="true"]:nth-of-type(3) p::after{animation:typeReveal .8s steps(6,end) forwards,caretBlink .9s step-end infinite;}
-.stTabs button[role="tab"][aria-selected="true"]:nth-of-type(4) p::after{animation:typeReveal .7s steps(5,end) forwards,caretBlink .9s step-end infinite;}
-.stTabs button[role="tab"][aria-selected="true"]:nth-of-type(5) p::after{animation:typeReveal .9s steps(7,end) forwards,caretBlink .9s step-end infinite;}
+.st-key-nav label[data-baseweb="radio"]:nth-child(1):has(input:checked) p::after{animation:typeReveal .7s steps(5,end) forwards,caretBlink .9s step-end infinite;}
+.st-key-nav label[data-baseweb="radio"]:nth-child(2):has(input:checked) p::after{animation:typeReveal 1.3s steps(13,end) forwards,caretBlink .9s step-end infinite;}
+.st-key-nav label[data-baseweb="radio"]:nth-child(3):has(input:checked) p::after{animation:typeReveal .8s steps(6,end) forwards,caretBlink .9s step-end infinite;}
+.st-key-nav label[data-baseweb="radio"]:nth-child(4):has(input:checked) p::after{animation:typeReveal .7s steps(5,end) forwards,caretBlink .9s step-end infinite;}
+.st-key-nav label[data-baseweb="radio"]:nth-child(5):has(input:checked) p::after{animation:typeReveal .9s steps(7,end) forwards,caretBlink .9s step-end infinite;}
 
+.nav-badge{
+    width:64px;height:64px;border-radius:50%;display:grid;place-items:center;
+    background:var(--navtext);color:var(--navbg);font-weight:800;font-size:1.3rem;letter-spacing:.02em;
+}
+.nav-pill{
+    background:var(--navtext);color:var(--navbg);border-radius:999px;padding:1.05rem 1.6rem;
+    font-weight:600;font-size:1.05rem;text-align:center;white-space:nowrap;
+}
 @media (max-width:900px){
-    .stTabs [role="tablist"]::before,.stTabs [role="tablist"]::after{display:none;}
-    .stTabs button[role="tab"]{padding:.8rem .4rem!important;}
-    .stTabs button[role="tab"] p{font-size:.95rem!important;}
+    .nav-badge,.nav-pill{display:none;}
+    .st-key-nav label[data-baseweb="radio"]{padding:.8rem .3rem!important;}
+    .st-key-nav label[data-baseweb="radio"] p{font-size:.95rem!important;}
 }
 
 /* ---------- native widgets ---------- */
@@ -330,7 +333,7 @@ li[role="option"]{color:var(--text)!important;}
 
 @media (prefers-reduced-motion: reduce){
     *{animation:none!important;transition:none!important;}
-    .stTabs button[role="tab"] p::after{display:none!important;}
+    .st-key-nav label[data-baseweb="radio"] p::after{display:none!important;}
 }
 """
 
@@ -549,12 +552,16 @@ html(f"""
 </div>
 """)
 
-tab_about, tab_story, tab_skills, tab_works, tab_contact = st.tabs(
-    ["About", "Autobiography", "Skills", "Works", "Contact"]
-)
+# ---------- menu bar ----------
+PAGES = ["About", "Autobiography", "Skills", "Works", "Contact"]
+with st.container(key="nav"):
+    n1, n2, n3 = st.columns([1, 9, 2.6], gap="small", vertical_alignment="center")
+    n1.markdown(f'<div class="nav-badge">{INITIALS}</div>', unsafe_allow_html=True)
+    page = n2.radio("Menu", PAGES, horizontal=True, label_visibility="collapsed", key="page")
+    n3.markdown(f'<div class="nav-pill">{SECTION}</div>', unsafe_allow_html=True)
 
 # ---------- about ----------
-with tab_about:
+if page == "About":
     col_img, col_text = st.columns([1, 2], gap="large")
     with col_img:
         show_image("profile.jpg", "Photo of me")
@@ -570,7 +577,7 @@ with tab_about:
                     "about myself.", icon=":material/search:")
 
 # ---------- autobiography ----------
-with tab_story:
+elif page == "Autobiography":
     heading("book", "My story")
     left, right = st.columns(2, gap="large")
     with left:
@@ -617,7 +624,7 @@ with tab_story:
         st.write("[A goal, a habit, or something you want to get better at.]")
 
 # ---------- skills ----------
-with tab_skills:
+elif page == "Skills":
     heading("bars", "Skills")
     st.write("[One or two sentences about how you learned these.]")
 
@@ -653,7 +660,7 @@ with tab_skills:
     st.progress(55, text="Git: 55%")
 
 # ---------- works ----------
-with tab_works:
+elif page == "Works":
     heading("trophy", "Works")
     visible = [w for w in works if set(w["tools"]) & set(picked_tools)]
     if not visible:
@@ -677,7 +684,7 @@ with tab_works:
                     st.link_button("View project", w["link"], icon=":material/arrow_outward:")
 
 # ---------- contact ----------
-with tab_contact:
+elif page == "Contact":
     heading("mail", "Contact / feedback")
     st.write("Leave a message or tell me what you think of the page.")
 
