@@ -445,9 +445,9 @@ def go(p):
 
 # data
 skills = pd.DataFrame({
-    "Skill": ["Python", "Godot", "LibreSprite", "Streamlit", "Git", "Teamwork"],
-    "Category": ["Programming", "Game dev", "Art", "Programming", "Tools", "Soft skill"],
-    "Level": [80, 65, 60, 65, 55, 75],
+    "Skill": ["Python", "C", "C++", "Java", "C#", "HTML", "CSS", "JavaScript", "Godot", "Streamlit", "Git", "LibreSprite", "Teamwork"],
+    "Category": ["Programming", "Programming", "Programming", "Programming", "Programming", "Web dev", "Web dev", "Web dev", "Game dev", "Tools", "Tools", "Art", "Soft skill"],
+    "Level": [60, 75, 70, 70, 65, 75, 70, 65, 10, 80, 75, 60, 75],
 })
 
 works = [
@@ -663,7 +663,7 @@ elif page == "Autobiography":
 # Skills
 elif page == "Skills":
     heading("bars", "Skills")
-    st.write("[One or two sentences about how you learned these.]")
+    st.write("Here are my programming languages, tools, and technical competencies. I am currently focusing intensively on Streamlit, Git, C#, and Python.")
 
     f1, f2 = st.columns(2)
     category = f1.selectbox("Category", ["All"] + sorted(skills["Category"].unique()))
@@ -693,8 +693,10 @@ elif page == "Skills":
     st.metric("Average level", f"{np.round(view['Level'].mean(), 1)}" if not view.empty else "-")
 
     heading("activity", "Currently improving", sub=True)
-    st.progress(65, text="Streamlit: 65%")
-    st.progress(55, text="Git: 55%")
+    st.progress(80, text="Streamlit: 80%")
+    st.progress(75, text="Git: 75%")
+    st.progress(65, text="C#: 65%")
+    st.progress(60, text="Python: 60%")
 
 # Works
 elif page == "Works":
