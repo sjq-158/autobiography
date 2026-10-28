@@ -13,17 +13,17 @@ PROGRAM = "BS Computer Science, 3rd year"
 INITIALS = "EL"
 IMG_DIR = Path(__file__).parent / "assets" / "images"
 
-# ID card details (edit these)
+# ID card details
 ID_NAME = "Ericka Ligaray"
-ID_DOB = "[Month DD]"
-ID_MBTI = "[MBTI]"
-ID_HOBBIES = "Reading comics and books, gardening"
-ID_COLOR = "[Fav color]"
+ID_DOB = "May 18, 2006"
+ID_MBTI = "ISTJ"
+ID_HOBBIES = "Reading comics and books, gardening, music, games"
+ID_COLOR = "Blue"
 ID_NO = "#001-A1"
 
 st.set_page_config(page_title=f"{NAME} | Portfolio", page_icon=":material/person:", layout="wide")
 
-# ---------- dark / light ----------
+# dark and light mode
 _, top_right = st.columns([5, 1.3])
 dark = top_right.toggle(":material/dark_mode: Dark mode", key="dark")
 
@@ -34,7 +34,6 @@ LIGHT = {
     "tagbg": "#FFF7D6", "tagtext": "#1F3A5F", "blockbg": "#1F3A5F", "blocktext": "#FFFFFF",
     "hero1": "#A8C6E7", "hero2": "#FFF2B2", "hero3": "#FFE08A",
     "bandbg": "#1F3A5F", "bandtext": "#FFF7D6",
-    # menu: dark yellow chosen item with blue text
     "navbg": "#1F3A5F", "navtext": "#FFF7D6", "navhl": "#FFE08A", "navhltext": "#1F3A5F",
     "scheme": "light",
 }
@@ -51,7 +50,7 @@ DARK = {
 }
 P = DARK if dark else LIGHT
 
-# ---------- svg icons (feather / lucide style) ----------
+# svg icons
 ICONS = {
     "user": '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
     "book": '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
@@ -69,9 +68,11 @@ ICONS = {
     "chat": '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
     "bars": '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
     "folder": '<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>',
+    "music": '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+    "compass": '<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
 }
 
-# ---------- menu setup ----------
+# menu setup
 PAGES = ["About", "Autobiography", "Skills", "Works", "Contact"]
 NAV_ICONS = {"About": "user", "Autobiography": "book", "Skills": "bars", "Works": "trophy", "Contact": "mail"}
 
@@ -101,6 +102,7 @@ def nav_css():
     return "".join(rules)
 
 
+# Font: Poppins
 FONT_IMPORT = (
     "@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800"
     "&family=Inter:wght@400;500;600&display=swap');"
@@ -379,14 +381,15 @@ li[role="option"]{color:var(--text)!important;}
 }
 """
 
-# the chart is drawn by Streamlit with its own theme, so flip it in dark mode
 DARK_EXTRA = '[data-testid="stVegaLiteChart"]{filter:invert(1) hue-rotate(180deg);border-radius:12px;}' if dark else ""
 
 st.markdown(f"<style>{FONT_IMPORT}{VARS}{BASE_CSS}{nav_css()}{DARK_EXTRA}</style>", unsafe_allow_html=True)
 
 
-# ---------- helpers ----------
+# helper 
 def icon(name, size=20):
+    if not name or name not in ICONS:
+        return ""
     return (
         f'<svg class="ico" width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" '
         f'stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
@@ -440,7 +443,7 @@ def go(p):
     st.session_state.page = p
 
 
-# ---------- data (edit these) ----------
+# data
 skills = pd.DataFrame({
     "Skill": ["Python", "Godot", "LibreSprite", "Streamlit", "Git", "Teamwork"],
     "Category": ["Programming", "Game dev", "Art", "Programming", "Tools", "Soft skill"],
@@ -453,8 +456,8 @@ works = [
         "sub": "",
         "event": "AI Ready ASEAN Youth Challenge 2026",
         "result": "Philippines Top 10 Finalist",
-        "role": "[your role]",
-        "tools": ["[add tools]"],
+        "role": "Member, Researcher",
+        "tools": ["Python", "Machine Learning"],
         "details": "A tracking and warning system of peatland in Indonesia.",
         "link": "https://github.com/sjq-158",
         "image": "project1.jpg",
@@ -465,7 +468,7 @@ works = [
         "sub": "",
         "event": "DOST Next Level Game Development",
         "result": "Participant",
-        "role": "Participant, Moyven Team",
+        "role": "Participant, Moyve Team",
         "tools": ["Godot", "LibreSprite"],
         "details": "A chess game with multiple variations.",
         "link": "https://github.com/sjq-158",
@@ -477,7 +480,7 @@ works = [
         "sub": "Dark Vessel Detection for Maritime Domain Awareness in the West Philippine Sea",
         "event": "CEISSAFP Ideathon 2026",
         "result": "Top 10 Finalist",
-        "role": "[your role]",
+        "role": "Member, Researcher",
         "tools": ["ESA Sentinel-1", "NOAA VIIRS", "AIS"],
         "details": (
             "It introduces a standing detection layer built on free satellite data: ESA Sentinel-1 "
@@ -505,20 +508,26 @@ milestones = pd.DataFrame({
         "Moved to Minglanilla Central School",
         "Started junior high at Minglanilla Science High School",
         "Started senior high at Minglanilla Science High School",
-        "Started BS Computer Science at CIT-U",
-        "Top 10 Finalist at the AI Ready ASEAN Youth Challenge and the CEISSAFP Ideathon",
+        "Started BS Computer Science at Cebu Institute of Technology - University",
+        "Join competitions and became Top 10 Finalist at the AI Ready ASEAN Youth Challenge 2026 and the CEISSAFP Ideathon 2026",
     ],
 })
 
-interests = [("book", "Reading comics and books"), ("leaf", "Gardening")]
+interests = [
+    ("book", "Reading comics and books"),
+    ("leaf", "Gardening"),
+    ("music", "Playing music"),
+    ("gamepad", "Playing mobile games"),
+    ("compass", "Doing fun sidequests"),
+]
 
-# ---------- session state ----------
+# session state
 if "likes" not in st.session_state:
     st.session_state.likes = 0
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# ---------- sidebar ----------
+# sidebar
 with st.sidebar:
     st.header(NAME)
     st.caption(SECTION)
@@ -526,7 +535,7 @@ with st.sidebar:
     st.divider()
 
     st.subheader("Filters")
-    all_tools = sorted({t for w in works for t in w["tools"]})
+    all_tools = sorted({t for w in works for t in w.get("tools", [])})
     picked_tools = st.multiselect("Show works that use", all_tools, default=all_tools)
     show_fun = st.checkbox("Show fun fact", value=True)
 
@@ -545,7 +554,7 @@ with st.sidebar:
     st.download_button("Download my summary", summary, file_name="summary.txt",
                        icon=":material/download:")
 
-# ---------- hero with id card ----------
+# ID card
 photo_uri = img_uri("profile.jpg")
 photo = f'<img src="{photo_uri}" alt="Profile photo"/>' if photo_uri else icon("user", 64)
 id_rows = "".join(
@@ -579,7 +588,7 @@ html(f"""
 </div>
 """)
 
-# ---------- menu bar ----------
+# Menu Bar
 with st.container(key="nav"):
     cols = st.columns(5, gap="small", vertical_alignment="center")
     for col, p in zip(cols, PAGES):
@@ -588,7 +597,7 @@ with st.container(key="nav"):
 
 page = current
 
-# ---------- about ----------
+# About Me
 if page == "About":
     col_img, col_text = st.columns([1, 2], gap="large")
     with col_img:
@@ -604,7 +613,7 @@ if page == "About":
             st.info("Fun fact: I need to Ctrl + F first. I am not really keen on details "
                     "about myself.", icon=":material/search:")
 
-# ---------- autobiography ----------
+# Autobiography
 elif page == "Autobiography":
     heading("book", "My story")
     left, right = st.columns(2, gap="large")
@@ -651,7 +660,7 @@ elif page == "Autobiography":
     with st.expander("Something I'm still working on"):
         st.write("[A goal, a habit, or something you want to get better at.]")
 
-# ---------- skills ----------
+# Skills
 elif page == "Skills":
     heading("bars", "Skills")
     st.write("[One or two sentences about how you learned these.]")
@@ -687,10 +696,10 @@ elif page == "Skills":
     st.progress(65, text="Streamlit: 65%")
     st.progress(55, text="Git: 55%")
 
-# ---------- works ----------
+# Works
 elif page == "Works":
     heading("trophy", "Works")
-    visible = [w for w in works if set(w["tools"]) & set(picked_tools)]
+    visible = [w for w in works if set(w.get("tools", [])) & set(picked_tools)]
     if not visible:
         st.warning("No works match the tools picked in the sidebar.")
     else:
@@ -707,11 +716,11 @@ elif page == "Works":
                     <span class="badge">{icon("trophy", 15)}{w["result"]}</span>
                     """)
                     st.write(f"**Role:** {w['role']}")
-                    st.write(f"**Tools:** {', '.join(w['tools'])}")
+                    st.write(f"**Tools:** {', '.join(w.get('tools', []))}")
                     st.write(f"**Details:** {w['details']}")
                     st.link_button("View project", w["link"], icon=":material/arrow_outward:")
 
-# ---------- contact ----------
+# Contact
 elif page == "Contact":
     heading("mail", "Contact / feedback")
     st.write("Leave a message or tell me what you think of the page.")
