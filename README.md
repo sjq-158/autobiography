@@ -57,19 +57,10 @@ autobiography/
 └── README.md
 ```
 
-## Editing the content
-
-Personal details are near the top of `app.py` (name, section, skills, projects,
-milestones). Add pictures to `assets/images/` and match the filenames.
 
 ## Deploy on Streamlit Community Cloud
-
-1. Push the repo to GitHub (it must be public and include `requirements.txt`).
-2. Go to https://share.streamlit.io and sign in with GitHub.
-3. Click **Create app**, pick this repo, branch `main`, and main file `app.py`.
-4. Deploy, then paste the link at the top of this README.
+Go to https://autobiography-erickafatimaligaray.streamlit.app/ to view the program.
 
 ## Design
-
 - Colors: `#7FA8D6`, `#FFF2B2`, `#A8C6E7`, `#FFE08A`, `#FFF7D6`
 - Font: Poppins
