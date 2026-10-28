@@ -183,7 +183,7 @@ hr{border-color:var(--line)!important;}
 /* each page's columns slide up when you switch pages */
 [data-testid="stColumn"]{animation:fadeBottom .6s ease-out backwards;}
 
-/* ---------- correct vertical image orientation for both About section and ID card ---------- */
+/* ---------- image orientation styling ---------- */
 [data-testid="stImage"] img {
     transform: rotate(270deg);
     transition: scale .4s;
@@ -193,7 +193,7 @@ hr{border-color:var(--line)!important;}
     height: 100%;
     object-fit: cover;
     display: block;
-    transform: rotate(270deg);
+    transform: none;
 }
 
 /* ---------- hero ---------- */
