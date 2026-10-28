@@ -1,6 +1,7 @@
 import base64
 from datetime import date
 from pathlib import Path
+from urllib.parse import quote
 
 import numpy as np
 import pandas as pd
@@ -49,6 +50,56 @@ DARK = {
     "scheme": "dark",
 }
 P = DARK if dark else LIGHT
+
+# ---------- svg icons (feather / lucide style) ----------
+ICONS = {
+    "user": '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+    "book": '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+    "leaf": '<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>',
+    "trophy": '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>',
+    "pin": '<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
+    "cap": '<path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>',
+    "heart": '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',
+    "star": '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+    "mail": '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>',
+    "search": '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+    "gamepad": '<line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="15.01" y1="13" y2="13"/><line x1="18" x2="18.01" y1="11" y2="11"/><rect width="20" height="12" x="2" y="6" rx="2"/>',
+    "globe": '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+    "activity": '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+    "chat": '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+    "bars": '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
+    "folder": '<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>',
+}
+
+# ---------- menu setup ----------
+PAGES = ["About", "Autobiography", "Skills", "Works", "Contact"]
+NAV_ICONS = {"About": "user", "Autobiography": "book", "Skills": "bars", "Works": "trophy", "Contact": "mail"}
+
+if "page" not in st.session_state:
+    st.session_state.page = "About"
+current = st.session_state.page
+
+
+def nav_css():
+    """Per-page svg icons (drawn with a mask so they follow the text color) and the typing speed."""
+    rules = []
+    for p, name in NAV_ICONS.items():
+        svg = (
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" '
+            'stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICONS[name] + "</svg>"
+        )
+        uri = "data:image/svg+xml," + quote(svg)
+        rules.append(
+            f'.stApp .st-key-nav [class*="st-key-nav_o"][class*="_{p}"] button::before'
+            f'{{-webkit-mask:url("{uri}") center/contain no-repeat;mask:url("{uri}") center/contain no-repeat;}}'
+        )
+    n = len(current)
+    rules.append(
+        '.stApp .st-key-nav [class*="st-key-nav_on_"] button p::after'
+        f"{{animation:typeReveal {n * 0.09:.2f}s steps({n},end) forwards,caretBlink .9s step-end infinite;}}"
+    )
+    return "".join(rules)
+
 
 FONT_IMPORT = (
     "@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800"
@@ -247,59 +298,6 @@ hr{border-color:var(--line)!important;}
 }
 .placeholder .ico{animation:floaty 3s ease-in-out infinite;}
 
-/* ---------- menu bar ---------- */
-.st-key-nav{
-    background:var(--navbg);border-radius:999px;padding:.55rem .7rem;
-    box-shadow:0 10px 24px rgba(16,36,61,.25);margin-bottom:1.4rem;
-}
-.st-key-nav [data-testid="stHorizontalBlock"]{align-items:center;gap:.6rem;}
-.st-key-nav [data-testid="stColumn"]{animation:none;}
-.st-key-nav [data-testid="stRadio"]{width:100%;}
-.st-key-nav [role="radiogroup"]{
-    display:flex!important;flex-direction:row;flex-wrap:nowrap;width:100%;gap:.4rem!important;
-}
-.st-key-nav label[data-baseweb="radio"]{
-    flex:1 1 0;justify-content:center;margin:0!important;padding:1.1rem .8rem!important;
-    border-radius:999px;cursor:pointer;transition:background .3s,translate .25s;
-}
-/* hide the round radio dot */
-.st-key-nav label[data-baseweb="radio"] > div:first-child{display:none!important;}
-.st-key-nav label[data-baseweb="radio"] p{
-    position:relative;display:inline-block;margin:0;white-space:nowrap;
-    color:var(--navtext)!important;font-size:1.3rem!important;font-weight:500;letter-spacing:.01em;
-}
-.st-key-nav label[data-baseweb="radio"]:hover{translate:0 -3px;background:rgba(255,255,255,.12);}
-.st-key-nav label[data-baseweb="radio"]:has(input:checked){
-    background:var(--navhl)!important;animation:tabPop .45s cubic-bezier(.34,1.56,.64,1);
-}
-.st-key-nav label[data-baseweb="radio"]:has(input:checked) p{color:var(--navhltext)!important;font-weight:700;}
-
-/* typing effect: a cover in the chosen color shrinks away, its left edge is the blinking caret */
-.st-key-nav label[data-baseweb="radio"]:has(input:checked) p::after{
-    content:"";position:absolute;top:0;bottom:0;right:-4px;width:100%;box-sizing:border-box;
-    background:var(--navhl);border-left:2px solid var(--navhltext);
-    animation:typeReveal .9s steps(10,end) forwards,caretBlink .9s step-end infinite;
-}
-.st-key-nav label[data-baseweb="radio"]:nth-child(1):has(input:checked) p::after{animation:typeReveal .7s steps(5,end) forwards,caretBlink .9s step-end infinite;}
-.st-key-nav label[data-baseweb="radio"]:nth-child(2):has(input:checked) p::after{animation:typeReveal 1.3s steps(13,end) forwards,caretBlink .9s step-end infinite;}
-.st-key-nav label[data-baseweb="radio"]:nth-child(3):has(input:checked) p::after{animation:typeReveal .8s steps(6,end) forwards,caretBlink .9s step-end infinite;}
-.st-key-nav label[data-baseweb="radio"]:nth-child(4):has(input:checked) p::after{animation:typeReveal .7s steps(5,end) forwards,caretBlink .9s step-end infinite;}
-.st-key-nav label[data-baseweb="radio"]:nth-child(5):has(input:checked) p::after{animation:typeReveal .9s steps(7,end) forwards,caretBlink .9s step-end infinite;}
-
-.nav-badge{
-    width:64px;height:64px;border-radius:50%;display:grid;place-items:center;
-    background:var(--navtext);color:var(--navbg);font-weight:800;font-size:1.3rem;letter-spacing:.02em;
-}
-.nav-pill{
-    background:var(--navtext);color:var(--navbg);border-radius:999px;padding:1.05rem 1.6rem;
-    font-weight:600;font-size:1.05rem;text-align:center;white-space:nowrap;
-}
-@media (max-width:900px){
-    .nav-badge,.nav-pill{display:none;}
-    .st-key-nav label[data-baseweb="radio"]{padding:.8rem .3rem!important;}
-    .st-key-nav label[data-baseweb="radio"] p{font-size:.95rem!important;}
-}
-
 /* ---------- native widgets ---------- */
 [data-testid="stMetric"]{
     background:var(--card);border-left:6px solid var(--accent);padding:.9rem 1.1rem;border-radius:12px;
@@ -331,38 +329,71 @@ li[role="option"]{color:var(--text)!important;}
 .footer{display:flex;justify-content:center;align-items:center;gap:.6rem;color:var(--muted);padding:2rem 0 .8rem;}
 .footer .ico{color:var(--accent);animation:heartbeat 1.6s ease-in-out infinite;}
 
+/* ---------- menu bar (comes last so it wins over the generic button styles) ---------- */
+.stApp .st-key-nav{
+    background:var(--navbg);border:1px solid var(--line);border-radius:999px;padding:.55rem .7rem;
+    box-shadow:0 10px 24px rgba(16,36,61,.25);margin-bottom:1.4rem;
+}
+.stApp .st-key-nav [data-testid="stHorizontalBlock"]{align-items:center;gap:.5rem;}
+.stApp .st-key-nav [data-testid="stColumn"]{animation:none;min-width:0;}
+.stApp .st-key-nav .stButton{width:100%;}
+.stApp .st-key-nav button{
+    width:100%;display:flex;align-items:center;justify-content:center;gap:.6rem;height:auto;
+    padding:1.05rem .8rem;border:none!important;border-radius:999px;box-shadow:none!important;
+    background:transparent!important;color:var(--navtext)!important;animation:none;
+    transition:background .25s,translate .25s;
+}
+.stApp .st-key-nav button::before{content:"";flex:none;width:22px;height:22px;background:currentColor;}
+.stApp .st-key-nav button *{color:inherit!important;}
+.stApp .st-key-nav button p{
+    position:relative;display:inline-block;margin:0;white-space:nowrap;
+    font-size:1.2rem;font-weight:600;letter-spacing:.01em;
+}
+.stApp .st-key-nav button:hover{background:rgba(255,255,255,.14)!important;translate:0 -3px;animation:none;}
+.stApp .st-key-nav button:focus,.stApp .st-key-nav button:active{
+    color:var(--navtext)!important;box-shadow:none!important;outline:none;
+}
+/* chosen item */
+.stApp .st-key-nav [class*="st-key-nav_on_"] button,
+.stApp .st-key-nav [class*="st-key-nav_on_"] button:hover,
+.stApp .st-key-nav [class*="st-key-nav_on_"] button:focus,
+.stApp .st-key-nav [class*="st-key-nav_on_"] button:active{
+    background:var(--navhl)!important;color:var(--navhltext)!important;translate:0 0;
+}
+.stApp .st-key-nav [class*="st-key-nav_on_"] button{animation:tabPop .45s cubic-bezier(.34,1.56,.64,1);}
+.stApp .st-key-nav [class*="st-key-nav_on_"] button p{font-weight:700;}
+/* typing effect: a cover in the chosen color shrinks away, its left edge is the blinking caret */
+.stApp .st-key-nav [class*="st-key-nav_on_"] button p::after{
+    content:"";position:absolute;top:0;bottom:0;right:-4px;width:100%;box-sizing:border-box;
+    background:var(--navhl);border-left:2px solid var(--navhltext);
+}
+.nav-badge{
+    width:64px;height:64px;border-radius:50%;display:grid;place-items:center;
+    background:var(--navtext);color:var(--navbg);font-weight:800;font-size:1.3rem;letter-spacing:.02em;
+}
+.nav-pill{
+    background:var(--navtext);color:var(--navbg);border-radius:999px;padding:1.05rem 1.6rem;
+    font-weight:600;font-size:1.05rem;text-align:center;white-space:nowrap;
+}
+@media (max-width:900px){
+    .stApp .st-key-nav button p{font-size:.95rem;}
+    .stApp .st-key-nav button::before{width:16px;height:16px;}
+    .nav-badge,.nav-pill{display:none;}
+}
+
 @media (prefers-reduced-motion: reduce){
     *{animation:none!important;transition:none!important;}
-    .st-key-nav label[data-baseweb="radio"] p::after{display:none!important;}
+    .stApp .st-key-nav [class*="st-key-nav_on_"] button p::after{display:none!important;}
 }
 """
 
 # the chart is drawn by Streamlit with its own theme, so flip it in dark mode
 DARK_EXTRA = '[data-testid="stVegaLiteChart"]{filter:invert(1) hue-rotate(180deg);border-radius:12px;}' if dark else ""
 
-st.markdown(f"<style>{FONT_IMPORT}{VARS}{BASE_CSS}{DARK_EXTRA}</style>", unsafe_allow_html=True)
-
-# ---------- svg icons (feather / lucide style) ----------
-ICONS = {
-    "user": '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
-    "book": '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
-    "leaf": '<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>',
-    "trophy": '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>',
-    "pin": '<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
-    "cap": '<path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>',
-    "heart": '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',
-    "star": '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
-    "mail": '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>',
-    "search": '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
-    "gamepad": '<line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="15.01" y1="13" y2="13"/><line x1="18" x2="18.01" y1="11" y2="11"/><rect width="20" height="12" x="2" y="6" rx="2"/>',
-    "globe": '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
-    "activity": '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
-    "chat": '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
-    "bars": '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
-    "folder": '<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>',
-}
+st.markdown(f"<style>{FONT_IMPORT}{VARS}{BASE_CSS}{nav_css()}{DARK_EXTRA}</style>", unsafe_allow_html=True)
 
 
+# ---------- helpers ----------
 def icon(name, size=20):
     return (
         f'<svg class="ico" width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" '
@@ -411,6 +442,10 @@ def show_image(filename, label):
         st.image(str(path), caption=label)
     else:
         html(f'<div class="placeholder">{icon("user", 34)}<br>{label}<br>(stand-in image)</div>')
+
+
+def go(p):
+    st.session_state.page = p
 
 
 # ---------- data (edit these) ----------
@@ -553,12 +588,15 @@ html(f"""
 """)
 
 # ---------- menu bar ----------
-PAGES = ["About", "Autobiography", "Skills", "Works", "Contact"]
 with st.container(key="nav"):
-    n1, n2, n3 = st.columns([1, 9, 2.6], gap="small", vertical_alignment="center")
-    n1.markdown(f'<div class="nav-badge">{INITIALS}</div>', unsafe_allow_html=True)
-    page = n2.radio("Menu", PAGES, horizontal=True, label_visibility="collapsed", key="page")
-    n3.markdown(f'<div class="nav-pill">{SECTION}</div>', unsafe_allow_html=True)
+    cols = st.columns([1, 2, 2.7, 2, 2, 2, 3.4], gap="small", vertical_alignment="center")
+    cols[0].markdown(f'<div class="nav-badge">{INITIALS}</div>', unsafe_allow_html=True)
+    for col, p in zip(cols[1:6], PAGES):
+        state = "on" if current == p else "off"
+        col.button(p, key=f"nav_{state}_{p}", on_click=go, args=(p,))
+    cols[6].markdown(f'<div class="nav-pill">{SECTION}</div>', unsafe_allow_html=True)
+
+page = current
 
 # ---------- about ----------
 if page == "About":
