@@ -460,7 +460,7 @@ works = [
         "tools": ["Python", "Machine Learning"],
         "details": "A tracking and warning system of peatland in Indonesia.",
         "link": "https://github.com/sjq-158",
-        "image": "project1.jpg",
+        "image": "project1.png",
         "icon": "activity",
     },
     {
@@ -472,7 +472,7 @@ works = [
         "tools": ["Godot", "LibreSprite"],
         "details": "A chess game with multiple variations.",
         "link": "https://github.com/sjq-158",
-        "image": "project2.jpg",
+        "image": "project2.png",
         "icon": "gamepad",
     },
     {
@@ -607,7 +607,7 @@ if page == "About":
         st.write(
             "I am a curious and funny kid who is still searching for answers in life. "
             "I am trying new things, looking for fresh and bold ideas, and dare to achieve "
-            "bigger leaps. Yet, I also like peace, quiet and solace."
+            "bigger leaps. Yet, I also like peace, quiet and solace in my own world."
         )
         if show_fun:
             st.info("Fun fact: I need to Ctrl + F first. I am not really keen on details "
@@ -619,7 +619,7 @@ elif page == "Autobiography":
     left, right = st.columns(2, gap="large")
     with left:
         heading("pin", "Background", sub=True)
-        st.write("I am currently living in Cebu City and Minglanilla, travelling back and forth.")
+        st.write("I am currently living in Cebu City and Minglanilla, travelling back and forth. I have lived with my grandmother and my younger sibling. I always love to travel and explore new things in life. I am focused in my academics and thrive for success.")
 
         heading("cap", "Education", sub=True)
         items = "".join(
@@ -658,7 +658,7 @@ elif page == "Autobiography":
     st.table(shown.set_index("Year"))
 
     with st.expander("Something I'm still working on"):
-        st.write("[A goal, a habit, or something you want to get better at.]")
+        st.write("I am still focusing on my studies while having sidequests in school such as joining competitions and organizations. I am looking forward to new adventures and experiences that would help me discover my potentials and explore opportunities ahead of me.")
 
 # Skills
 elif page == "Skills":
