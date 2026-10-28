@@ -566,8 +566,8 @@ with st.sidebar:
     st.download_button("Download my summary", summary, file_name="summary.txt",
                        icon=":material/download:")
 
-# ID card
-photo_uri = img_uri("profile.jpg")
+# ID card using profile2.jpg
+photo_uri = img_uri("profile2.jpg")
 photo = f'<img src="{photo_uri}" alt="Profile photo"/>' if photo_uri else icon("user", 64)
 id_rows = "".join(
     f'<div class="id-row"><span class="k">{k}</span><span class="v">{v}</span></div>'
