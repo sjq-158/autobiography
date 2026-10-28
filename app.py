@@ -64,7 +64,7 @@ ICONS = {
     "mail": '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>',
     "search": '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
     "gamepad": '<line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="15.01" y1="13" y2="13"/><line x1="18" x2="18.01" y1="11" y2="11"/><rect width="20" height="12" x="2" y="6" rx="2"/>',
-    "globe": '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+    "globe": '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z"/>',
     "activity": '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
     "chat": '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
     "bars": '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
@@ -201,8 +201,8 @@ hr{border-color:var(--line)!important;}
 .dot{width:10px;height:10px;border-radius:50%;background:#2E9E6B;animation:pulsate 1.6s ease-in-out infinite;}
 .block{
     display:inline-block;background:var(--blockbg);color:var(--blocktext);
-    font-size:clamp(1.8rem,4.2vw,3.2rem);font-weight:600;line-height:1.25;
-    padding:.2rem 1.3rem;margin:1.1rem 0;animation:textFocus .9s ease-out backwards .25s;
+    font-size:clamp(1.8rem,4.2vw,3.2rem);font-weight:800;line-height:1.25;
+    padding:.3rem 1.3rem;margin:1.1rem 0;animation:textFocus .9s ease-out backwards .25s;
 }
 .deco{position:absolute;z-index:1;opacity:.5;color:var(--text);}
 .d1{top:8%;left:46%;animation:floaty 5s ease-in-out infinite,spin 20s linear infinite;}
@@ -331,23 +331,23 @@ li[role="option"]{color:var(--text)!important;}
 
 /* ---------- menu bar (comes last so it wins over the generic button styles) ---------- */
 .stApp .st-key-nav{
-    background:var(--navbg);border:1px solid var(--line);border-radius:999px;padding:.55rem .7rem;
-    box-shadow:0 10px 24px rgba(16,36,61,.25);margin-bottom:1.4rem;
+    background:var(--navbg);border:1px solid var(--line);border-radius:999px;padding:.5rem .8rem;
+    box-shadow:0 10px 24px rgba(16,36,61,.25);margin-bottom:1.4rem;overflow:visible;
 }
-.stApp .st-key-nav [data-testid="stHorizontalBlock"]{align-items:center;gap:.5rem;}
-.stApp .st-key-nav [data-testid="stColumn"]{animation:none;min-width:0;}
+.stApp .st-key-nav [data-testid="stHorizontalBlock"]{align-items:center;gap:.4rem;}
+.stApp .st-key-nav [data-testid="stColumn"]{animation:none;min-width:0;overflow:visible;}
 .stApp .st-key-nav .stButton{width:100%;}
 .stApp .st-key-nav button{
-    width:100%;display:flex;align-items:center;justify-content:center;gap:.6rem;height:auto;
-    padding:1.05rem .8rem;border:none!important;border-radius:999px;box-shadow:none!important;
+    width:100%;display:flex;align-items:center;justify-content:center;gap:.5rem;height:auto;
+    padding:.85rem .6rem;border:none!important;border-radius:999px;box-shadow:none!important;
     background:transparent!important;color:var(--navtext)!important;animation:none;
-    transition:background .25s,translate .25s;
+    transition:background .25s,translate .25s;overflow:visible;
 }
-.stApp .st-key-nav button::before{content:"";flex:none;width:22px;height:22px;background:currentColor;}
+.stApp .st-key-nav button::before{content:"";flex:none;width:20px;height:20px;background:currentColor;}
 .stApp .st-key-nav button *{color:inherit!important;}
 .stApp .st-key-nav button p{
     position:relative;display:inline-block;margin:0;white-space:nowrap;
-    font-size:1.2rem;font-weight:600;letter-spacing:.01em;
+    font-size:1.05rem;font-weight:600;letter-spacing:.01em;overflow:visible;
 }
 .stApp .st-key-nav button:hover{background:rgba(255,255,255,.14)!important;translate:0 -3px;animation:none;}
 .stApp .st-key-nav button:focus,.stApp .st-key-nav button:active{
@@ -367,18 +367,10 @@ li[role="option"]{color:var(--text)!important;}
     content:"";position:absolute;top:0;bottom:0;right:-4px;width:100%;box-sizing:border-box;
     background:var(--navhl);border-left:2px solid var(--navhltext);
 }
-.nav-badge{
-    width:64px;height:64px;border-radius:50%;display:grid;place-items:center;
-    background:var(--navtext);color:var(--navbg);font-weight:800;font-size:1.3rem;letter-spacing:.02em;
-}
-.nav-pill{
-    background:var(--navtext);color:var(--navbg);border-radius:999px;padding:1.05rem 1.6rem;
-    font-weight:600;font-size:1.05rem;text-align:center;white-space:nowrap;
-}
+
 @media (max-width:900px){
-    .stApp .st-key-nav button p{font-size:.95rem;}
+    .stApp .st-key-nav button p{font-size:.9rem;}
     .stApp .st-key-nav button::before{width:16px;height:16px;}
-    .nav-badge,.nav-pill{display:none;}
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -589,12 +581,10 @@ html(f"""
 
 # ---------- menu bar ----------
 with st.container(key="nav"):
-    cols = st.columns([1, 2, 2.7, 2, 2, 2, 3.4], gap="small", vertical_alignment="center")
-    cols[0].markdown(f'<div class="nav-badge">{INITIALS}</div>', unsafe_allow_html=True)
-    for col, p in zip(cols[1:6], PAGES):
+    cols = st.columns([1, 1.4, 1, 1, 1], gap="small", vertical_alignment="center")
+    for col, p in zip(cols, PAGES):
         state = "on" if current == p else "off"
         col.button(p, key=f"nav_{state}_{p}", on_click=go, args=(p,))
-    cols[6].markdown(f'<div class="nav-pill">{SECTION}</div>', unsafe_allow_html=True)
 
 page = current
 
