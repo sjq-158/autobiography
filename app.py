@@ -31,7 +31,9 @@ LIGHT = {
     "line": "rgba(31,58,95,.2)", "input": "#FFFFFF",
     "tagbg": "#FFF7D6", "tagtext": "#1F3A5F", "blockbg": "#1F3A5F", "blocktext": "#FFFFFF",
     "hero1": "#A8C6E7", "hero2": "#FFF2B2", "hero3": "#FFE08A",
-    "bandbg": "#1F3A5F", "bandtext": "#FFF7D6", "scheme": "light",
+    "bandbg": "#1F3A5F", "bandtext": "#FFF7D6",
+    "navbg": "#1F3A5F", "navtext": "#FFF7D6", "navhl": "#FFE08A", "navhltext": "#1F3A5F",
+    "scheme": "light",
 }
 DARK = {
     "bg": "#0E1A2B", "side": "#132238", "card": "#1A2C47", "card2": "#2A4468",
@@ -39,13 +41,15 @@ DARK = {
     "line": "rgba(234,241,250,.2)", "input": "#1A2C47",
     "tagbg": "#2A4468", "tagtext": "#EAF1FA", "blockbg": "#FFE08A", "blocktext": "#1F3A5F",
     "hero1": "#1F3A5F", "hero2": "#2B4A75", "hero3": "#6B5E2E",
-    "bandbg": "#7FA8D6", "bandtext": "#10243D", "scheme": "dark",
+    "bandbg": "#7FA8D6", "bandtext": "#10243D",
+    "navbg": "#1A2C47", "navtext": "#EAF1FA", "navhl": "#7FA8D6", "navhltext": "#10243D",
+    "scheme": "dark",
 }
 P = DARK if dark else LIGHT
 
 FONT_IMPORT = (
-    "@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700"
-    "&family=Caveat:wght@500;600&display=swap');"
+    "@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800"
+    "&family=Inter:wght@400;500;600&display=swap');"
 )
 VARS = ":root{" + "".join(f"--{k}:{v};" for k, v in P.items()) + \
        "--paper:#FFF7D6;--ink:#1F3A5F;color-scheme:" + P["scheme"] + ";}"
@@ -64,7 +68,11 @@ BASE_CSS = """
 [data-testid="stMetricValue"], [data-testid="stMetricLabel"]{color:var(--text);}
 [data-testid="stCaptionContainer"] p{color:var(--muted);}
 h1,h2,h3{font-weight:600;}
+.stApp h1,.stApp h2,.stApp h3{text-transform:uppercase;font-weight:700;letter-spacing:.03em;}
 hr{border-color:var(--line)!important;}
+
+/* second font: Inter */
+.tag,.id-card,.p-top,.p-sub,.tl-text,.badge{font-family:'Inter',sans-serif;}
 
 /* ---------- keyframes (animista basic style) ---------- */
 @keyframes fadeBottom{from{opacity:0;translate:0 40px}to{opacity:1;translate:0 0}}
@@ -101,9 +109,9 @@ hr{border-color:var(--line)!important;}
     75%{translate:-2px 0;rotate:-1deg}
 }
 @keyframes spin{to{rotate:360deg}}
-@keyframes marquee{to{transform:translateX(-50%)}}
 @keyframes grow{from{width:0}}
 @keyframes gradientShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes tabPop{0%{scale:.8}60%{scale:1.06}100%{scale:1}}
 
 /* scroll reveal: plays on load, and follows the scroll in browsers that support it */
 .reveal{animation:fadeBottom .8s ease-out backwards var(--d,0s);}
@@ -120,7 +128,7 @@ hr{border-color:var(--line)!important;}
 .hero{
     position:relative;overflow:hidden;display:flex;flex-wrap:wrap;align-items:center;
     justify-content:space-between;gap:2.5rem;min-height:430px;padding:3rem;
-    border-radius:26px;margin-bottom:1rem;
+    border-radius:26px;margin-bottom:1.2rem;
     background:linear-gradient(120deg,var(--hero1),var(--hero2),var(--hero3),var(--hero1));
     background-size:300% 300%;animation:gradientShift 14s ease infinite;
 }
@@ -169,31 +177,21 @@ hr{border-color:var(--line)!important;}
 }
 .id-photo img{width:100%;height:100%;object-fit:cover;display:block;}
 .id-fields{flex:1 1 220px;min-width:200px;}
-.id-row{display:flex;gap:.7rem;align-items:baseline;margin:.5rem 0;font-size:.85rem;}
+.id-row{display:flex;gap:.7rem;align-items:baseline;margin:.6rem 0;font-size:.82rem;}
 .id-row .k{flex:none;width:6.2rem;font-weight:500;color:#4F6B8F;}
 .id-row .v{
-    flex:1;border-bottom:2px dotted rgba(31,58,95,.55);font-family:'Caveat',cursive;
-    font-size:1.4rem;line-height:1.15;color:var(--ink);
+    flex:1;border-bottom:2px dotted rgba(31,58,95,.55);font-weight:600;
+    font-size:.95rem;line-height:1.5;color:var(--ink);
 }
 .id-foot{
     background:#FFE08A;padding:.55rem 1.4rem;font-weight:600;font-size:.85rem;
     text-decoration:underline;color:#1F3A5F;
 }
 
-/* ---------- marquee ---------- */
-.marquee{overflow:hidden;border-block:2px solid var(--line);padding:.7rem 0;margin:.4rem 0 1.4rem;}
-.marquee-track{display:flex;width:max-content;animation:marquee 32s linear infinite;}
-.marquee:hover .marquee-track{animation-play-state:paused;}
-.m-item{
-    display:inline-flex;align-items:center;gap:1.2rem;padding-right:1.2rem;white-space:nowrap;
-    font-weight:500;color:var(--text);
-}
-.m-item .ico{color:var(--accent);animation:spin 8s linear infinite;}
-
 /* ---------- headings, chips, timeline ---------- */
 .ico{flex:none;vertical-align:-.2em;}
-.sec-head{display:flex;align-items:center;gap:.7rem;font-weight:600;font-size:1.9rem;color:var(--text);margin:.2rem 0 .6rem;}
-.sub-head{display:flex;align-items:center;gap:.6rem;font-weight:600;font-size:1.2rem;color:var(--text);margin:1rem 0 .4rem;}
+.sec-head{display:flex;align-items:center;gap:.9rem;font-weight:800;font-size:2.8rem;line-height:1.1;text-transform:uppercase;letter-spacing:.02em;color:var(--text);margin:.2rem 0 .8rem;}
+.sub-head{display:flex;align-items:center;gap:.7rem;font-weight:700;font-size:1.4rem;text-transform:uppercase;letter-spacing:.04em;color:var(--text);margin:1.2rem 0 .5rem;}
 .sec-head .ico,.sub-head .ico{color:var(--accent);animation:floaty 3.5s ease-in-out infinite;}
 .chips{display:flex;flex-wrap:wrap;gap:.7rem;margin:.4rem 0 1rem;}
 .chip{
@@ -243,14 +241,32 @@ hr{border-color:var(--line)!important;}
 }
 .placeholder .ico{animation:floaty 3s ease-in-out infinite;}
 
+/* ---------- menu (tabs) ---------- */
+[data-baseweb="tab-list"]{
+    background:var(--navbg);border-radius:999px;padding:.5rem;gap:.3rem;width:100%;
+    box-shadow:0 10px 24px rgba(16,36,61,.25);margin-bottom:1.2rem;
+}
+[data-baseweb="tab-highlight"],[data-baseweb="tab-border"]{display:none!important;}
+button[data-baseweb="tab"]{
+    flex:1 1 0;justify-content:center;height:auto;padding:.85rem 1rem;border-radius:999px;
+    background:transparent;transition:background .3s,translate .25s;
+}
+button[data-baseweb="tab"] [data-testid="stMarkdownContainer"] p{
+    color:var(--navtext)!important;font-size:1.2rem;font-weight:600;letter-spacing:.02em;transition:color .3s;
+}
+button[data-baseweb="tab"]:hover{translate:0 -3px;background:rgba(255,255,255,.12);}
+button[data-baseweb="tab"][aria-selected="true"]{
+    background:var(--navhl);animation:tabPop .45s cubic-bezier(.34,1.56,.64,1);
+}
+button[data-baseweb="tab"][aria-selected="true"] [data-testid="stMarkdownContainer"] p{color:var(--navhltext)!important;}
+@media (max-width:640px){button[data-baseweb="tab"] [data-testid="stMarkdownContainer"] p{font-size:.9rem;}}
+
 /* ---------- native widgets ---------- */
 [data-testid="stMetric"]{
     background:var(--card);border-left:6px solid var(--accent);padding:.9rem 1.1rem;border-radius:12px;
     transition:transform .25s,box-shadow .25s;
 }
 [data-testid="stMetric"]:hover{transform:translateY(-6px) rotate(-1deg);box-shadow:0 10px 22px rgba(16,36,61,.2);}
-button[data-baseweb="tab"]{color:var(--muted);font-weight:500;}
-button[data-baseweb="tab"][aria-selected="true"]{color:var(--text);}
 .stButton button,.stDownloadButton button,[data-testid="stFormSubmitButton"] button,.stLinkButton a{
     background:var(--accent)!important;border:none!important;border-radius:10px!important;
     transition:background .2s;
@@ -331,7 +347,7 @@ def html(s):
 
 def heading(name, text, sub=False):
     cls = "sub-head" if sub else "sec-head"
-    html(f'<div class="{cls} reveal">{icon(name, 22 if sub else 28)}<span>{text}</span></div>')
+    html(f'<div class="{cls} reveal">{icon(name, 28 if sub else 42)}<span>{text}</span></div>')
 
 
 @st.cache_data
@@ -426,8 +442,6 @@ milestones = pd.DataFrame({
 })
 
 interests = [("book", "Reading comics and books"), ("leaf", "Gardening")]
-marquee_items = ["Computer Science", "Game development", "Reading comics", "Gardening",
-                 "Top 10 Finalist", "Cebu, Philippines"]
 
 # ---------- session state ----------
 if "likes" not in st.session_state:
@@ -496,9 +510,6 @@ html(f"""
 </div>
 """)
 
-track = "".join(f'<span class="m-item">{t}{icon("star", 16)}</span>' for t in marquee_items)
-html(f'<div class="marquee"><div class="marquee-track">{track}{track}</div></div>')
-
 tab_about, tab_story, tab_skills, tab_works, tab_contact = st.tabs(
     ["About", "Autobiography", "Skills", "Works", "Contact"]
 )
@@ -515,11 +526,6 @@ with tab_about:
             "I am trying new things, looking for fresh and bold ideas, and dare to achieve "
             "bigger leaps. Yet, I also like peace, quiet and solace."
         )
-        m1, m2, m3 = st.columns(3)
-        m1.metric("Year level", "3rd")
-        m2.metric("Works", len(works))
-        m3.metric("Top 10 finishes", 2)
-
         if show_fun:
             st.info("Fun fact: I need to Ctrl + F first. I am not really keen on details "
                     "about myself.", icon=":material/search:")
