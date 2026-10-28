@@ -183,9 +183,9 @@ hr{border-color:var(--line)!important;}
 /* each page's columns slide up when you switch pages */
 [data-testid="stColumn"]{animation:fadeBottom .6s ease-out backwards;}
 
-/* ---------- ONLY target the About page profile photo container ---------- */
+/* ---------- ONLY target the About page profile photo container (Adjust rotation degrees as needed) ---------- */
 .about-profile-img [data-testid="stImage"] img {
-    transform: rotate(90deg);
+    transform: rotate(270deg);
     transition: scale .4s;
 }
 .id-photo img {
