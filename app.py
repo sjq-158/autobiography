@@ -183,11 +183,13 @@ hr{border-color:var(--line)!important;}
 /* each page's columns slide up when you switch pages */
 [data-testid="stColumn"]{animation:fadeBottom .6s ease-out backwards;}
 
-/* ---------- ONLY target the About page profile photo container (Adjust rotation degrees as needed) ---------- */
+/* ---------- ONLY target the About page profile photo container ---------- */
 .about-profile-img [data-testid="stImage"] img {
-    transform: rotate(270deg);
+    transform: rotate(90deg);
     transition: scale .4s;
 }
+
+/* ---------- ID card image orientation/styling ---------- */
 .id-photo img {
     width: 100%;
     height: 100%;
