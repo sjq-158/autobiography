@@ -1,4 +1,5 @@
 import base64
+import io
 from datetime import date
 from pathlib import Path
 from urllib.parse import quote
@@ -6,12 +7,17 @@ from urllib.parse import quote
 import numpy as np
 import pandas as pd
 import streamlit as st
+from PIL import Image, ImageOps
 
 NAME = "Ericka Fatima Reign R. Ligaray"
 SECTION = "CS365 - Applied AI"
 PROGRAM = "BS Computer Science, 3rd year"
 INITIALS = "EL"
 IMG_DIR = Path(__file__).parent / "assets" / "images"
+
+# Extra manual rotation (degrees, counter-clockwise) for the About page photo only.
+# Leave at 0 unless the photo still looks sideways (try 90, -90 or 180).
+ABOUT_PHOTO_ROTATE = 0
 
 # ID card details
 ID_NAME = "Ericka Ligaray"
@@ -183,26 +189,20 @@ hr{border-color:var(--line)!important;}
 /* each page's columns slide up when you switch pages */
 [data-testid="stColumn"]{animation:fadeBottom .6s ease-out backwards;}
 
-/* ---------- ONLY target the About page profile photo container (Vertical layout like ID card) ---------- */
-.about-profile-img [data-testid="stImage"] {
-    width: 260px;
-    height: 340px;
-    border-radius: 22px;
-    overflow: hidden;
-    border: 6px solid #FFE08A;
-    box-shadow: 0 10px 25px rgba(16,36,61,0.25);
-    background: #A8C6E7;
+/* ---------- About page profile photo (portrait, same look as the ID card photo) ---------- */
+.about-photo{width:100%;max-width:340px;margin:0 auto;}
+.about-photo .frame{
+    width:100%;aspect-ratio:3 / 4;border-radius:22px;overflow:hidden;
+    border:6px solid #FFE08A;background:#A8C6E7;
+    box-shadow:0 0 0 4px #7FA8D6,0 10px 25px rgba(16,36,61,.25);
+    display:grid;place-items:center;color:#1F3A5F;
 }
-.about-profile-img [data-testid="stImage"] img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transform: none;
-    transition: scale .4s;
+.about-photo .frame img{
+    width:100%;height:100%;object-fit:cover;object-position:center top;
+    display:block;transform:none;transition:scale .4s;
 }
-.about-profile-img [data-testid="stImage"] img:hover {
-    scale: 1.05;
-}
+.about-photo .frame:hover img{scale:1.05;}
+.about-photo .cap{text-align:center;color:var(--muted);font-size:.85rem;margin-top:.7rem;}
 
 /* ---------- ID card image orientation/styling ---------- */
 .id-photo img {
@@ -459,6 +459,31 @@ def img_uri(filename):
     return _b64(str(path), path.stat().st_mtime) if path.exists() else None
 
 
+@st.cache_data
+def _portrait_uri(path_str, mtime, rotate):
+    """Load a photo, apply its EXIF rotation (plus an optional manual one) and return a jpeg data uri."""
+    img = Image.open(path_str)
+    img = ImageOps.exif_transpose(img)
+    if rotate:
+        img = img.rotate(rotate, expand=True)
+    img = img.convert("RGB")
+    img.thumbnail((900, 1200))
+    buf = io.BytesIO()
+    img.save(buf, format="JPEG", quality=88)
+    return "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()
+
+
+def about_photo_html(filename, label):
+    """Portrait (vertical) photo frame used only on the About page."""
+    path = IMG_DIR / filename
+    if path.exists():
+        uri = _portrait_uri(str(path), path.stat().st_mtime, ABOUT_PHOTO_ROTATE)
+        inner = f'<img src="{uri}" alt="{label}"/>'
+    else:
+        inner = f'<div>{icon("user", 64)}<br>(stand-in image)</div>'
+    return f'<div class="about-photo reveal"><div class="frame">{inner}</div><div class="cap">{label}</div></div>'
+
+
 def show_image(filename, label):
     """Show the image if it exists, otherwise a labeled stand-in."""
     path = IMG_DIR / filename
@@ -630,9 +655,7 @@ page = current
 if page == "About":
     col_img, col_text = st.columns([1, 2], gap="large")
     with col_img:
-        st.markdown('<div class="about-profile-img">', unsafe_allow_html=True)
-        show_image("profile.jpg", "Photo of me")
-        st.markdown('</div>', unsafe_allow_html=True)
+        html(about_photo_html("profile.jpg", "Photo of me"))
     with col_text:
         heading("user", "About me")
         st.write(
