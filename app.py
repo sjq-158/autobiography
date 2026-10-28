@@ -183,6 +183,19 @@ hr{border-color:var(--line)!important;}
 /* each page's columns slide up when you switch pages */
 [data-testid="stColumn"]{animation:fadeBottom .6s ease-out backwards;}
 
+/* ---------- image orientation fix ---------- */
+[data-testid="stImage"] img {
+    transform: rotate(90deg);
+    transition: scale .4s;
+}
+.id-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transform: rotate(90deg);
+}
+
 /* ---------- hero ---------- */
 .hero{
     position:relative;overflow:hidden;display:flex;flex-wrap:wrap;align-items:center;
@@ -234,7 +247,6 @@ hr{border-color:var(--line)!important;}
     background:#A8C6E7;color:#1F3A5F;overflow:hidden;display:grid;place-items:center;
     box-shadow:0 0 0 4px #7FA8D6;
 }
-.id-photo img{width:100%;height:100%;object-fit:cover;display:block;}
 .id-fields{flex:1 1 220px;min-width:200px;}
 .id-row{display:flex;gap:.7rem;align-items:baseline;margin:.6rem 0;font-size:.82rem;}
 .id-row .k{flex:none;width:6.2rem;font-weight:500;color:#4F6B8F;}
