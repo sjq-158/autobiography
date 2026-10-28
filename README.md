@@ -1,66 +1,55 @@
-# Autobiography and Portfolio
+# Ericka Ligaray - Portfolio
 
-A personal site built with Streamlit for Applied AI.
-It has my autobiography, my skills, three projects, and a contact form.
+My personal portfolio website for CS365 (Applied AI), built with Streamlit. It has my intro, my story, my interests, my skills, and the competitions I've joined.
 
-**Name:** Ericka Fatima Reign R. Ligaray
-**Section:** [Your Section]
-**Live app:** [paste your .streamlit.app link here]
+## Pages
 
-## What's inside
+- **About** - a short intro and a photo of the student
+- **Autobiography** - background, education timeline, interests, and a milestones table
+- **Skills** - my skill levels, viewable as bars, a chart, or a table
+- **Works** - Team PasanAI, Se Cognos Chess, and Banta
+- **Contact** - a feedback form
 
-- About, Autobiography, Skills, Projects, and Contact tabs
-- A sidebar with filters, a like button, and a downloadable summary
-- Skills shown as a table and a bar chart
-- A contact form that responds after you submit it
+## Running it
 
-### Streamlit components used
-
-`title`, `header`, `subheader`, `write`, `markdown`, `dataframe`, `bar_chart`,
-`button`, `slider`, `selectbox`, `checkbox`, `text_input`, `text_area`, `radio`,
-`multiselect`, `sidebar`, `columns`, `image`, `tabs`, `metric`, `form`,
-`session_state`, `download_button`, `progress`, `expander`, `container`,
-`toast`, `balloons`, `link_button`, and a custom theme.
-
-## Run it locally
-
-Windows (PowerShell):
-
-```powershell
-git clone https://github.com/sjq-158/autobiography.git
-cd autobiography
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-streamlit run app.py
-```
-
-Mac/Linux:
+You need Python 3.9 or newer.
 
 ```bash
-git clone https://github.com/sjq-158/autobiography.git
-cd autobiography
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+pip install streamlit pandas numpy pillow
 streamlit run app.py
 ```
+
+Then open the link Streamlit prints in the terminal (usually http://localhost:8501).
+
+You can also access the program based on this link as well, https://autobiography-erickafatimaligaray.streamlit.app/. 
 
 ## Folder structure
 
 ```
-autobiography/
-├── .streamlit/config.toml   # theme colors
-├── assets/images/           # profile and project pictures
-├── app.py                   # the app
-├── requirements.txt
-└── README.md
+.
+├── app.py
+├── README.md
+└── assets
+    └── images
+        ├── profile.jpg     (About page photo)
+        ├── profile2.jpg    (ID card photo)
+        ├── project1.png
+        ├── project2.png
+        └── project3.jpg
 ```
 
+If an image is missing, the page shows a placeholder instead of crashing.
 
-## Deploy on Streamlit Community Cloud
-Go to https://autobiography-erickafatimaligaray.streamlit.app/ to view the program.
+## Content
+Most of the content is near the top or in the data section of `app.py`:
 
-## Design
-- Colors: `#7FA8D6`, `#FFF2B2`, `#A8C6E7`, `#FFE08A`, `#FFF7D6`
-- Font: Poppins
+- Name, section, and program are the constants at the top
+- ID card details are the `ID_` variables
+- Skills are in the `skills` table
+- Projects are in the `works` list
+- Education, milestones, and interests are in their own lists below that
+
+
+## Made by
+Ericka Fatima Reign R. Ligaray
+BS Computer Science, 3rd year, Cebu Institute of Technology - University
